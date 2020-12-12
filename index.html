@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge" />
+	<title>index</title>
+	<style>
+		html {
+			height:100%;
+		}
+		body {
+			background-color:#2C2C2C;
+			margin:0;
+			height:100%;
+		}
+	</style>
+	<!-- copy these lines to your document head: -->
+
+	<meta name="viewport" content="user-scalable=yes, width=800" />
+	<link href='https://fonts.googleapis.com/css?family=Holtwood+One+SC&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Grandstander&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Syne+Mono&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Henny+Penny&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Averia+Libre&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Baloo+Tammudu+2&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Cute+Font&subset=latin' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="index.hyperesources/jquery.js"></script>
+	
+	<style>  
+		body { background-color: black; }
+	</style>
+
+	<script>
+	
+		// Declare global variables
+		var gblCurrentlySpinning = false,	    // Are the displays currently spinning?
+			 gblPayTableDisplayed = false,    // Is the pay table currently displayed?
+			 gblMultiplier = 0,				    // The reward multiplier for the current round
+			 gblTotalAmount = 2000,			    // The amount of candy corn the player currently holds
+			 gblWager = 100,					    // The amound of candy corn wagered for the current round
+			 gblRoundsPlayed = 0,			    // The total number for rounds played
+			 gblMaxTotalAmount = 2000,		    // The maximum total amount of candy corn held at any point in the game
+			 gblBiggestWin = 0,				    // The largest amount of candy corn won on any round during the game
+			 gblSecretButtonValue = "off",    // Used for the cheat easter egg. Possible settings: 'pumpkins', 'corns', 'three', 'skulls', and 'off'
+			 gblSoundResult = "lose", 		    // The sound timeline to play at the end of a round. Options include 'lose', 'small', and 'big'
+			 gblIncrementInterval,			    // A reference to the interval that animates the incrementation of the grand total after a win
+			 gblIntervalCycle;				    // A counter for the number of increments performed while updating the grand total
+			 
+			 
+			 /*
+			 	The following jQuery easing extension was based on code in jQuery Easing v1.3. Details of the open-source license and terms of use follow.
+			 */
+			 
+			 /*
+ 				* jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/
+				*
+ 				* Uses the built in easing capabilities added In jQuery 1.1
+ 				* to offer multiple easing options
+ 				*
+ 				* TERMS OF USE - jQuery Easing
+ 				* 
+ 				* Open source under the BSD License. 
+ 				* 
+ 				* Copyright Â© 2008 George McGinley Smith
+ 				* All rights reserved.
+ 				* 
+ 				* Redistribution and use in source and binary forms, with or without modification, 
+ 				* are permitted provided that the following conditions are met:
+ 				* 
+ 				* Redistributions of source code must retain the above copyright notice, this list of 
+ 				* conditions and the following disclaimer.
+ 				* Redistributions in binary form must reproduce the above copyright notice, this list 
+ 				* of conditions and the following disclaimer in the documentation and/or other materials 
+ 				* provided with the distribution.
+ 				* 
+ 				* Neither the name of the author nor the names of contributors may be used to endorse 
+ 				* or promote products derived from this software without specific prior written permission.
+ 				* 
+ 				* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+ 				* EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ 				* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ 				*  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ 				*  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ 				*  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
+ 				* AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ 				*  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+ 				* OF THE POSSIBILITY OF SUCH DAMAGE. 
+ 				*
+			*/
+			
+			// Create individualized 'back' easing functions for animating display spinners
+			$.extend($.easing,
+			{
+			 	easeOutBack1: function (placeholder, currentTime, beginningValue, changeInValue, duration, bounceFactor)
+			 	{
+
+			 		bounceFactor = 0.5;
+			 	
+			 		return changeInValue * ((currentTime = currentTime / duration - 1) * currentTime *
+			 				((bounceFactor + 1) * currentTime + bounceFactor) + 1) + beginningValue;
+			 	},
+			 	
+			 	easeOutBack2: function (placeholder, currentTime, beginningValue, changeInValue, duration, bounceFactor)
+			 	{
+
+		 			bounceFactor = 0.2;
+			 		
+					return changeInValue * ((currentTime = currentTime / duration - 1) * currentTime *
+		 					((bounceFactor + 1) * currentTime + bounceFactor) + 1) + beginningValue;
+		 		},
+			 		
+		 		easeOutBack3: function (placeholder, currentTime, beginningValue, changeInValue, duration, bounceFactor)
+		 		{
+
+		 			bounceFactor = 0.1;
+			 		
+		 			return changeInValue * ((currentTime = currentTime / duration - 1) * currentTime *
+			 				((bounceFactor + 1) * currentTime + bounceFactor) + 1) + beginningValue;
+		 		}
+		 	});
+			 									    
+	</script>
+	
+
+	<!-- end copy -->
+  </head>
+  <body>
+	<!-- copy these lines to your document: -->
+
+	<div id="index_hype_container" class="HYPE_document" style="margin:auto;position:relative;width:800px;height:600px;overflow:hidden;">
+		<script type="text/javascript" charset="utf-8" src="index.hyperesources/index_hype_generated_script.js?26318"></script>
+	</div>
+
+	<!-- end copy -->
+	
+
+
+	<!-- text content for search engines: -->
+
+	<div style="display:none" aria-hidden=true>
+
+		<div>SPIN</div>
+		<div>0</div>
+		<div>WIN</div>
+		<div></div>
+		<div>BET</div>
+		<div>WAIT</div>
+		<div>Timpani Roll Sound
+</div>
+		<div>Insufficient Funds!</div>
+		<div>10,000</div>
+		<div>-</div>
+		<div>+</div>
+		<div>1000</div>
+		<div>CREDITS</div>
+		<div>PLAY</div>
+		<div>CLICK</div>
+		<div>TO "CASH OUT" AND COLLECT YOUR CANDY</div>
+		<div>FOR PAYOUT
+AMOUNTS</div>
+		<div>HELP</div>
+		<div>LARGEST SINGLE WIN:</div>
+		<div>0</div>
+		<div>PLAY AGAIN?</div>
+		<div>FINAL GRAND TOTAL:</div>
+		<div>$ 00000</div>
+		<div>SUMMARY</div>
+		<div>$ 00000</div>
+		<div>MAX GRAND TOTAL:</div>
+		<div>TOTAL ROUNDS PLAYED:</div>
+		<div>
+
+Please Check Out More Student Games At:RetroGameDesign.com
+
+</div>
+		<div>
+GRAPHICS Jason Pape 
+PROGRAMMING Darren Pearson 
+Jason Pape 
+MUSIC & SOUND Jason Pape 
+DEVELOPMENT SOFTWARE Tumult Hype
+PLAYTESTING Christa 
+Lena 
+Nan 
+Rob 
+SPECIAL THANKS TO 
+Saint Paul College 
+Aimee, A.J., Bekkah, Ben, Josh, Json, Kirk, Orion & Régan 
+</div>
+		<div>This is the amount
+of your current BET.</div>
+		<div>5000</div>
+		<div>Use the + and -
+buttons to increase
+or decrease your bet.</div>
+		<div>How to Play</div>
+		<div>Click SPIN after
+you decide on a
+bet amount.</div>
+		<div>After the displays stop
+spinning, the amount
+you win (or lose)
+is shown here.</div>
+		<div>If you want to know what
+combinations of symbols
+pay what, click "?"
+to see the pay table.</div>
+		<div>When you're finished
+playing and want
+to quit, click the
+"CASH-OUT" button.</div>
+		<div>BEGIN!</div>
+		<div>2000</div>
+		<div>500</div>
+		<div>This is your
+GRAND TOTAL.</div>
+
+	</div>
+
+	<!-- end text content: -->
+
+  </body>
+</html>
